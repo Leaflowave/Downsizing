@@ -208,53 +208,6 @@ def kvcc_enum(g: nx.Graph, k, lmd, budget=1) -> list:
             for neighbor in list(sub_component_g.adj[u].keys()):
                 recompute_strong_side_vertex(sub_component_g, k, neighbor)
         return vcc + kvcc_enum(sub_component_g, k, lmd)
-    """
-
-
-
-    for component in components:
-        # print(len(component))
-        # skip the vccs that are smaller than 1/10 lmd
-        if len(component) <0.8*lmd:
-            continue
-        # print("component",len(component))
-        # if coreNum is None:
-        component_g = nx.Graph(g_core.subgraph(component))
-        # else:
-        #     component_g=g
-        # start = time.time()
-        # cut=global_cut(component_g,k)
-        cut = global_cut_optimization(component_g, k)
-        # cut=FastCheck(component_g,k)
-
-        # end = time.time()
-        # print("global cut:", end - start)
-
-        if cut is None:
-
-            vcc.append(component)
-            if len(component) > 0.8 * lmd: return vcc
-        else:
-            # print("cut-size:",len(cut))
-
-            sub_components = overlap_partition(component_g, cut)
-            for sub_component in sub_components:
-                # skip the vccs that are 1/50 smaller than lmd
-                if len(sub_component) < 0.8*lmd:
-                    continue
-                sub_component_g = component_g.subgraph(sub_component).copy()
-                # print("sub_component", len(sub_component_g))
-                # 对于那些是cut中的点或者有邻居在cut中的点，他们的side-vertex状态可能发生了改变，重新计算一遍
-                for u in cut:
-                    recompute_strong_side_vertex(sub_component_g, k, u)
-                    for neighbor in list(sub_component_g.adj[u].keys()):
-                        recompute_strong_side_vertex(sub_component_g, k, neighbor)
-
-                vcc = vcc + kvcc_enum(sub_component_g, k,lmd)
-
-        # print("vcc", len(vcc))
-    return vcc"""
-
 
 def kvcc_enum_random(g: nx.Graph, k, lmd, budget=1):
     """
@@ -300,49 +253,6 @@ def kvcc_enum_random(g: nx.Graph, k, lmd, budget=1):
         #   for neighbor in list(sub_component_g.adj[u].keys()):
         #       recompute_strong_side_vertex(sub_component_g, k, neighbor)
         return sub_component_g,cut,set(sub_component)
-
-    #
-    # for component in components:
-    #     # print(len(component))
-    #     # skip the vccs that are smaller than 1/10 lmd
-    #     if len(component) < 0.8 * lmd:
-    #         continue
-    #
-    #     if coreNum is None:
-    #         component_g = nx.Graph(g_core.subgraph(component))
-    #     else:
-    #         component_g = g
-    #     # start = time.time()
-    #     # cut=global_cut(component_g,k)
-    #     # cut = global_cut_optimization(component_g, k)
-    #     print("fast check start")
-    #     cut = FastCheck(component_g, k)
-    #     print("fast check end")
-    #     # end = time.time()
-    #     # print("global cut:", end - start)
-    #
-    #     if cut is None:
-    #         vcc.append(component)
-    #     else:
-    #         # print("cut-size:",len(cut))
-    #
-    #         sub_components = overlap_partition(component_g, cut)
-    #         for sub_component in sub_components:
-    #             # skip the vccs that are 1/50 smaller than lmd
-    #             if len(sub_component) < 0.8 * lmd:
-    #                 continue
-    #             sub_component_g = component_g.subgraph(sub_component).copy()
-    #             # 对于那些是cut中的点或者有邻居在cut中的点，他们的side-vertex状态可能发生了改变，重新计算一遍
-    #             # for u in cut:
-    #             # recompute_strong_side_vertex(sub_component_g, k, u)
-    #             # for neighbor in list(sub_component_g.adj[u].keys()):
-    #             #     recompute_strong_side_vertex(sub_component_g, k, neighbor)
-    #
-    #             vcc = vcc + kvcc_enum_random(sub_component_g, k, lmd)
-    #
-    # return vcc
-
-
 class SideGroup:
     id = 0
     deposit = 0
