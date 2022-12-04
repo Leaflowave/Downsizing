@@ -1,2 +1,2 @@
 # Downsizing
-This is the implementation of the article "".
+This is an implementation of the article.
